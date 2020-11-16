@@ -34,6 +34,21 @@ class PolyTreeNode
       nil
     end
 
+    # def dfs_parents(target)
+    #   return self.parent.value if self.value == target
+    #   return nil if self.parent.nil?
+      
+    #   i = 0
+    #   while i < self.children.length
+
+    #     search_result = self.children[i].dfs_parents(self.parent.value)
+    #     return search_result unless search_result.nil? 
+    #     i += 1
+    #   end
+
+    #   nil
+    # end
+  
     def bfs(target)
         queue = [self]
         until queue.empty?

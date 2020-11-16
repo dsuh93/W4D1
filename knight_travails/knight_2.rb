@@ -3,7 +3,8 @@ require_relative "./ptn.rb"
 class KnightPathFinder
     def self.valid_moves(pos)
         valid_moves = []
-        r, c = pos
+		r, c = pos
+
         return nil if r > 7 || r < 0 || c > 7 || c < 0
         valid_moves << [r + 2, c + 1] unless (r + 2) > 7 || (c + 1) > 7
         valid_moves << [r + 2, c - 1] unless (r + 2) > 7 || (c - 1) < 0
@@ -36,12 +37,13 @@ require "byebug"
             el = queue.shift
             new_move_positions(el.value).each {|pos| el.add_child(PolyTreeNode.new(pos))}
             el.children.each {|child| queue << child}
-        end
+		end
+		debugger
         return @root_node 
     end
 
     def find_path(end_pos)
-        if self.build_move_tree.dfs(end_pos) == end_pos
+    	if self.build_move_tree.dfs(end_pos) == end_pos
 			self.trace_path_back(end_pos)
 		else
 			raise "End position doesn't exist"
@@ -50,15 +52,17 @@ require "byebug"
 
     def trace_path_back(end_pos)
         move_tree = self.build_move_tree
-		traced_path = [@root_node.value]
-		until traced_path[-1] == end_pos
-			if move_tree.value != nil
-				traced_path.unshift(end_pos.parent)
-				end_pos = end_pos.parent
-			end	
+		traced_path = [end_pos]
+		until traced_path[0] == @root_node.value
+			# traced_path.unshift(move_tree.dfs_parents(end_pos))
+			.unshift
 		end
+    	# nil
+			
 		return traced_path
 	end
+
+	
 end
 
 knight = KnightPathFinder.new([0, 0])
