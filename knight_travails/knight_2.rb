@@ -45,13 +45,23 @@ require "byebug"
     def find_path(end_pos)
         node = self.build_move_tree.dfs(end_pos)
     	if !node.nil?
-			self.trace_path_back(end_pos)
+			self.trace_path_back(node)
 		else
 			raise "End position doesn't exist"
 		end
     end
 
     def trace_path_back(end_node)
+        traced_path = []
+        node = end_node
+        until traced_path[0] == @root_node.value
+            traced_path.unshift(node.value)
+            node = node.parent
+        end
+        traced_path
+    end
+
+
         # x = [2, -2, 2, -2, 1, -1, 1, -1]
         # y = [1, -1, -1, 1, 2, -2, -2, 2]
 
@@ -65,8 +75,7 @@ require "byebug"
         # end
 
         # return traced_path
-    end
 end
 
-knight = KnightPathFinder.new([0, 0])
-p knight.find_path([7, 6])
+knight = KnightPathFinder.new([4, 4])
+p knight.find_path([5, 5])
