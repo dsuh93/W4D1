@@ -21,11 +21,12 @@ class KnightPathFinder
         @root_node = PolyTreeNode.new(starting_position)
         @considered_positions = [starting_position]
     end
-
+require "byebug"
     def new_move_positions(pos)
+        # debugger
         valid_moves = KnightPathFinder.valid_moves(pos)
-        new_positions = valid_moves.reject! {|pos| @considered_positions.include?(pos)}
-        @considered_positions += new_positions
+        new_positions = valid_moves.reject {|pos| @considered_positions.include?(pos)}
+        @considered_positions += new_positions unless new_positions.empty?
         new_positions
     end
 
@@ -33,14 +34,14 @@ class KnightPathFinder
         queue = [@root_node]
         until queue.empty?
             el = queue.shift
-            new_move_positions(el.value).each {|pos| el.add_child(pos)}
+            new_move_positions(el.value).each {|pos| el.add_child(PolyTreeNode.new(pos))}
             el.children.each {|child| queue << child}
         end
         return @root_node 
     end
 
     def find_path(end_pos)
-		if self.build_move_tree.dfs(end_pos) == end_pos
+        if self.build_move_tree.dfs(end_pos) == end_pos
 			self.trace_path_back(end_pos)
 		else
 			raise "End position doesn't exist"
@@ -48,9 +49,10 @@ class KnightPathFinder
     end
 
     def trace_path_back(end_pos)
-		traced_path = [end_pos]
-		until traced_path[0] == @root_node.value
-			if end_pos.parent != nil
+        move_tree = self.build_move_tree
+		traced_path = [@root_node.value]
+		until traced_path[-1] == end_pos
+			if move_tree.value != nil
 				traced_path.unshift(end_pos.parent)
 				end_pos = end_pos.parent
 			end	
@@ -59,4 +61,5 @@ class KnightPathFinder
 	end
 end
 
-knight = KnightPathFinder.new([4, 4])
+knight = KnightPathFinder.new([0, 0])
+p knight.find_path([7, 6])
