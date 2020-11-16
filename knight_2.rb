@@ -33,15 +33,30 @@ class KnightPathFinder
         queue = [@root_node]
         until queue.empty?
             el = queue.shift
-            new_move_positions(el.value).each {|pos| el.children << pos}
+            new_move_positions(el.value).each {|pos| el.add_child(pos)}
             el.children.each {|child| queue << child}
         end
         return @root_node 
     end
 
     def find_path(end_pos)
-        self.build_move_tree.dfs(end_pos)
+		if self.build_move_tree.dfs(end_pos) == end_pos
+			self.trace_path_back(end_pos)
+		else
+			raise "End position doesn't exist"
+		end
     end
+
+    def trace_path_back(end_pos)
+		traced_path = [end_pos]
+		until traced_path[0] == @root_node.value
+			if end_pos.parent != nil
+				traced_path.unshift(end_pos.parent)
+				end_pos = end_pos.parent
+			end	
+		end
+		return traced_path
+	end
 end
 
 knight = KnightPathFinder.new([4, 4])
