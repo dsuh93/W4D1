@@ -38,31 +38,34 @@ require "byebug"
             new_move_positions(el.value).each {|pos| el.add_child(PolyTreeNode.new(pos))}
             el.children.each {|child| queue << child}
 		end
-		debugger
+		# debugger
         return @root_node 
     end
 
     def find_path(end_pos)
-    	if self.build_move_tree.dfs(end_pos) == end_pos
+        node = self.build_move_tree.dfs(end_pos)
+    	if !node.nil?
 			self.trace_path_back(end_pos)
 		else
 			raise "End position doesn't exist"
 		end
     end
 
-    def trace_path_back(end_pos)
-        move_tree = self.build_move_tree
-		traced_path = [end_pos]
-		until traced_path[0] == @root_node.value
-			# traced_path.unshift(move_tree.dfs_parents(end_pos))
-			.unshift
-		end
-    	# nil
-			
-		return traced_path
-	end
+    def trace_path_back(end_node)
+        # x = [2, -2, 2, -2, 1, -1, 1, -1]
+        # y = [1, -1, -1, 1, 2, -2, -2, 2]
 
-	
+        # r, c = end_pos
+        # traced_path = [end_pos]
+        # i = 0
+        # while traced_path[0] != @root_node.value
+        #     new_position = [r + x[i], c + y[i]]
+        #     traced_path.unshift(new_position) if @considered_positions.include?(new_position)
+
+        # end
+
+        # return traced_path
+    end
 end
 
 knight = KnightPathFinder.new([0, 0])
