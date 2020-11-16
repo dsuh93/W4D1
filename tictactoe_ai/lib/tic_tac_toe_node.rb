@@ -22,12 +22,14 @@ class TicTacToeNode
   # This method generates an array of all moves that can be made after
   # the current move.
   def children
-    board.each_with_index |row, r|
-      board.each_with_index |col, c|
-        if board[r][c].empty?
+    children_array = []
+    board.rows.each_with_index do |row, r|
+      row.each_with_index do |col, c|
+        if board.rows[r][c] == []
           board.dup[r][c] = next_mover_mark
         end
       end
     end
+
   end
 end
